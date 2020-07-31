@@ -1,0 +1,37 @@
+#%RAML 1.0
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/d7975714-b2bb-42f7-99d0-73dba773a688/ # 
+title: paymenthub
+/paymenthub:
+  post:
+    description: payment type
+    body:
+      application/json:
+        example: !include request.json
+    responses:
+      201:
+        body:
+          application/json:
+            example:
+              {
+                "msgCode": "00",
+                "status":"Insert Successful"
+              }
+      400:
+        body:
+          application/json:
+            example:
+              {
+                "msgCode": "400",
+                "status":"Invalid Request Received"
+              }
+      500:
+        body:
+          application/json:
+            example:
+              {
+                "msgCode": "500",
+                "status":"Internal Serer Error"
+              }
+              
+          
+          

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<sub-flow name="sf-paymenthub" doc:id="8d405146-1ec2-44bf-a61b-a6129cdcef24" >
+		<logger level="INFO" doc:name="Logger" doc:id="e2432553-d918-4703-8ee1-4d85f83569d9" category="**value is **" message="#[payload]"/>
+		<set-variable value="#[payload.paymentInfo.msgIdentification]" doc:name="Set Variable" doc:id="f0baef61-fa26-48b6-bbe8-c9fc773a224e" variableName="a"/>
+		<choice doc:name="Choice" doc:id="fb35367c-9866-488f-949b-51690774162d" >
+			<when expression="#[vars.a == 'SUSU1235697']">
+				<ee:transform doc:name="Transform Message" doc:id="8b1f0194-47fa-4f98-9215-c296ef6db4bc" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	msgCode: "201",
+  status: "Insert Successful"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<set-variable value="#[201]" doc:name="Set Variable" doc:id="f599ef52-c3b5-4b32-89e3-63bf8df1ecda" variableName="httpStatus"/>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="b50a401e-f839-4226-b267-0f922dca4567" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	
+	msgCode: "400",
+    status: "Invalid Request"
+
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<set-variable value="#[400]" doc:name="Set Variable" doc:id="dbd7eabd-ef52-4a11-9d79-62b070b6ce5b" variableName="httpStatus"/>
+			</otherwise>
+		</choice>
+	</sub-flow>
+</mule>
